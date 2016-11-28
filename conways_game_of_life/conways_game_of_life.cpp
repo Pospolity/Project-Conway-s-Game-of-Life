@@ -25,6 +25,7 @@ void cellsSetLife(cellStructure cell[y][x]); //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRK
 void nextGeneration(cellStructure cell[y][x]); //PRZEJŒCIE DO KOLEJNEJ GENERAJI
 char setMode(void); //USTAWIANIE TRYBU ¯YCIA (KROKOWY LUB NIESKOÑCZONY)
 void showCurrentGeneration(cellStructure cell[y][x]); //WYŒWIETLANIE OBECNEJ GENERACJI
+int setSpeedRatio(void);
 
 
  /* DEKLARACJA STA£YCH, STANOWI¥CYCH INDEKSY WIERZCHO£KÓW CZÊŒCI PLANSZY NA KTÓREJ BÊDZIE TOCZY£O SIÊ ¯YCIE (WSZYSTKIE KOMÓRKI POZA KOMÓRKAMI NA KRAWÊDZIACH PLANSZY) */
@@ -51,15 +52,8 @@ int main()
 		char mode = setMode(); //USTAWIANIE TRYBU ¯YCIA (KROKOWY LUB NIESKOÑCZONY)
 		/* ¯YCIE!!! */
 		int speedRatio = 1;
-		if (mode == 'c') {
-			do {
-				cout << "Podaj predkosc od 0 (wolno) do 500 (bardzo szybko) z jaka beda sie zmieniac generacje: ";
-				cin >> speedRatio;
-				system("cls");
-				if (speedRatio < 0 || speedRatio > 500)
-					cout << "Prosze sprobowac ponownie, tym razem czytajac ze zrozumieniem." << endl;
-			} while (speedRatio < 0 || speedRatio > 500);
-		}
+		if (mode == 'c')
+			speedRatio = setSpeedRatio();
 		while (mode == 'c') { //tryb ci¹g³y wiêc nieskoñczona pêtla
 			showCurrentGeneration(cell);
 			nextGeneration(cell);
@@ -177,4 +171,16 @@ void showCurrentGeneration(cellStructure cell[y][x]) //WYŒWIETLANIE OBECNEJ GENE
 		}
 		cout << endl;
 	}
+};
+
+int setSpeedRatio(void) {
+	int speedRatio;
+	do {
+		cout << "Podaj predkosc od 0 (wolno) do 500 (bardzo szybko) z jaka beda sie zmieniac generacje: ";
+		cin >> speedRatio;
+		system("cls");
+		if (speedRatio < 0 || speedRatio > 500)
+			cout << "Prosze sprobowac ponownie, tym razem czytajac ze zrozumieniem." << endl;
+	} while (speedRatio < 0 || speedRatio > 500);
+	return speedRatio;
 };
