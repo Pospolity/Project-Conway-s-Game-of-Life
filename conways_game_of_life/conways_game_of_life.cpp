@@ -53,17 +53,17 @@ int main()
 		int speedRatio = 1;
 		if (mode == 'c') {
 			do {
-				cout << "Podaj predkosc od 1 (wolno) do 500 (bardzo szybko) z jaka beda sie zmieniac generacje: ";
+				cout << "Podaj predkosc od 0 (wolno) do 500 (bardzo szybko) z jaka beda sie zmieniac generacje: ";
 				cin >> speedRatio;
 				system("cls");
-				if (speedRatio < 1 || speedRatio > 500)
+				if (speedRatio < 0 || speedRatio > 500)
 					cout << "Prosze sprobowac ponownie, tym razem czytajac ze zrozumieniem." << endl;
-			} while (speedRatio < 1 || speedRatio > 500);
+			} while (speedRatio < 0 || speedRatio > 500);
 		}
 		while (mode == 'c') { //tryb ci¹g³y wiêc nieskoñczona pêtla
 			showCurrentGeneration(cell);
 			nextGeneration(cell);
-			Sleep(DEFAULT_SLEEP_TIME / speedRatio);
+			Sleep(DEFAULT_SLEEP_TIME - speedRatio);
 			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorReset); //ustawianie kursora na pocz¹tek tablicy, aby j¹ nadpisaæ
 		}
 		if (mode == 'k') { //tryb krokowy
