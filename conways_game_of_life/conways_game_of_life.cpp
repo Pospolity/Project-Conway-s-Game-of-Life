@@ -1,4 +1,4 @@
-// conways_game_of_life_v2.cpp : Defines the entry point for the console application.
+// conways_game_of_life.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
