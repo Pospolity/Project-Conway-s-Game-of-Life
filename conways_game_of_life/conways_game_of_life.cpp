@@ -6,6 +6,8 @@
 #include "windows.h"
 #include <time.h>
 #include <cstdlib>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -21,6 +23,9 @@ struct cellStructure //pojedyncza komórka
 
 void cellsSetDead(cellStructure cell[y][x]); //TWORZENIE MARTWEJ PLANSZY (SZABLONU)
 void randomization(cellStructure cell[y][x]); //LOSOWANIE ¯YWYCH KOMÓREK NA PLANSZY
+int podajInt(int min, int max);
+void load(cellStructure cell[y][x], string template_name, int structure_number);
+void templates(cellStructure cell[y][x]);
 void cellsSetLife(cellStructure cell[y][x]); //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRKAMI
 void nextGeneration(cellStructure cell[y][x]); //PRZEJŒCIE DO KOLEJNEJ GENERAJI
 char setMode(void); //USTAWIANIE TRYBU ¯YCIA (KROKOWY LUB NIESKOÑCZONY)
@@ -97,20 +102,71 @@ void randomization(cellStructure cell[y][x])
 	}
 };
 
+int podajInt(int min, int max) {
+	int number;
+	cin >> number;
+	while (number < min && number > max) {
+		//system("cls");
+		cout << "Podales nieprawidlowa cyfre. Sprobuj ponownie" << endl;
+		cin >> number;
+		cout << number;
+	};
+	return number;
+};
+
+void load(cellStructure cell[y][x], string template_name, int structure_number) {
+	ifstream fromFile;
+	fromFile.open("szablony.txt");
+	if (!fromFile.good()) {
+		cout << "Nie udalo sie otworzyc pliku 'szablony.txt' lub jest on uszkodzony. Sprawdz czy znajduje sie on w sciezce z plikiem .exe tego programu. Plansza zostanie zapelniona losowo za kilka sekund.";
+		Sleep(5000);
+		randomization(cell);
+	};
+};
+
+void templates(cellStructure cell[y][x]) {
+	cout << "Oto lista dostepnych szablonow, wybierz jeden wpisujac przypisana do niego cyfre i zatwierdz enterem: " << endl << endl;
+	cout << "1. STRUKTURY STATYCZNE" << endl << "2. OSCYLATORY" << endl << "3. STATKI" << endl << "4. DZIALA" << endl;
+	int opt = podajInt(1, 4); //wybor szablonu struktur (szablon to np. oscylator, statek itd. - nie jest to oficjalne nazewnictwo)
+	system("cls");
+	cout << "Wybierz interesujaca strukture i zatwierdz enterem: " << endl << endl;
+	int opt2;
+	switch (opt) { //wyswietanie mozliwych opcji do wyboru i wybranie poszczegolnych struktur
+		case 1: 
+			cout << "1. klocek" << endl << "2. lodz" << endl << "3. bochenek" << endl << "4. krysztal" << endl << "5. koniczynka" << endl << "6. staw" << endl;
+			opt2 = podajInt(1, 6);
+			load(cell, "STRUKTURY_STATYCZNE", opt2);
+			break;
+		case 2:
+			cout << "1. blinker" << endl << "2. zabka" << endl << "3. staw" << endl << "4. krokodyl" << endl;
+			opt2 = podajInt(1, 4);
+			load(cell, "STRUKTURY_STATYCZNE", opt2);
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+//!!!dokonczyc!!!
+	}
+	
+
+	
+};
+
 void cellsSetLife(cellStructure cell[y][x]) //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRKAMI
 {
 	char startMap;
 	do {
-		cout << "Wcisnij 's' jesli chcesz gotowa mapke, 'l' aby plansza byla zapelniana losowo: ";
+		cout << "Wcisnij 's' jesli chcesz zobaczyc ktoras z ciekawych gotowych struktur lub 'l' aby plansza byla zapelniana losowo: ";
 		cin >> startMap;
 		system("cls");
 		if (startMap == 'l')
 			randomization(cell); //funkcja losuj¹ca planszê
-		else if (startMap == 's')
-			cout << "NIEDOSTEPNE W WERSJI BETA" << endl;
+		else if (startMap == 's') 
+			templates(cell); //funkcja wype³niaj¹ca plansze szablonem
 		else
 			cout << "nie ma takiej opcji, sprobuj ponownie." << endl;
-	} while (/*startMap != 's' &&*/ startMap != 'l'); //odkomentowac pierwszy warunek po dodaniu obs³ugi szablonów
+	} while (startMap != 's' && startMap != 'l'); //odkomentowac pierwszy warunek po dodaniu obs³ugi szablonów
 };
 
 void nextGeneration(cellStructure cell[y][x]) //PRZEJŒCIE DO KOLEJNEJ GENERAJI
