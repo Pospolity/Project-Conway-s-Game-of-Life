@@ -105,11 +105,10 @@ void randomization(cellStructure cell[y][x])
 int podajInt(int min, int max) {
 	int number;
 	cin >> number;
-	while (number < min && number > max) {
+	while (number < min || number > max) {
 		//system("cls");
 		cout << "Podales nieprawidlowa cyfre. Sprobuj ponownie" << endl;
 		cin >> number;
-		cout << number;
 	};
 	return number;
 };
@@ -118,7 +117,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 	ifstream fromFile;
 	fromFile.open("szablony.txt");
 	if (!fromFile.good()) {
-		cout << "Nie udalo sie otworzyc pliku 'szablony.txt' lub jest on uszkodzony. Sprawdz czy znajduje sie on w sciezce z plikiem .exe tego programu. Plansza zostanie zapelniona losowo za kilka sekund.";
+		cout << "Nie udalo sie otworzyc pliku 'szablony.txt' lub jest on uszkodzony. Sprawdz czy znajduje sie on w sciezce z plikiem .exe tego programu. Plansza zostanie zapelniona losowo za kilka sekund. Postepuj wedlug dalszych instrukcji." << endl;
 		Sleep(5000);
 		randomization(cell);
 	};
@@ -126,7 +125,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 
 void templates(cellStructure cell[y][x]) {
 	cout << "Oto lista dostepnych szablonow, wybierz jeden wpisujac przypisana do niego cyfre i zatwierdz enterem: " << endl << endl;
-	cout << "1. STRUKTURY STATYCZNE" << endl << "2. OSCYLATORY" << endl << "3. STATKI" << endl << "4. DZIALA" << endl;
+	cout << "1. STRUKTURY STATYCZNE" << endl << "2. OSCYLATORY" << endl << "3. STATKI" << endl << "4. DZIALA" << endl << endl;
 	int opt = podajInt(1, 4); //wybor szablonu struktur (szablon to np. oscylator, statek itd. - nie jest to oficjalne nazewnictwo)
 	system("cls");
 	cout << "Wybierz interesujaca strukture i zatwierdz enterem: " << endl << endl;
