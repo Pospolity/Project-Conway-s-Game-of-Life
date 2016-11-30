@@ -1,16 +1,16 @@
-Ten plik zawiera liste struktur podzielone na kategorie (szablony) oraz indeksy pól któe dla danej struktury maj¹ byæ ¿ywe. Po # sa zapisane szablony glowne, po $ struktury, natomiast wymiary sa podane w formacie [y]:[x]. .
+Ten plik zawiera liste struktur podzielone na kategorie (szablony) oraz indeksy pól któe dla danej struktury maj¹ byæ ¿ywe. Po # sa zapisane szablony glowne, po $ struktury(nazwy ktorych program nie uzywa oraz numery, ktore sluza do wybrania struktury przez program), natomiast wymiary sa podane w formacie [y]:[x]. .
 Kazda ingerencja w ten plik w postaci liter czy znakow w liniach nie zaczynajacych sie od znakow # i $ oraz od indeksow pól zostanie pominieta, natomiast w wymienionych liniach zostanie zauwazona przez program jako bledne dane i uniemozliwi dzialanie programu lub spowoduje pominiecie o¿ywiania w³aœciwych pól.
 Wymiary planszy to 30y 80x, wiec zywe komorki mozna definiowac w wymiarach (1 do 28)Y i (1 do 78)x. indeksy nie mieszczace sie w tych wymiarach sprawi¹ pominiêcie ca³ej linii.
 #STRUKTURY_STATYCZNE
 
-klocek
+$klocek
 $1
-15:40.
-15:41.
-16:40.
-16:41.
+15:40.aa
+15:41.b
+16:dd40.
+16cc:41.
 
-³ódŸ
+$³ódŸ
 $2
 15:40.
 15:41.
@@ -18,7 +18,7 @@ $2
 16:42.
 17:41.
 
-bochenek
+$bochenek
 $3
 15:40.
 15:41.
@@ -28,44 +28,59 @@ $3
 17:41.
 18:40.
 
-kryszta³
+$kryszta³
 $4
 
-koniczynka
+$koniczynka
 $5
 
-staw
+$staw
 $6
 
 #OSCYLATORY
 
-blinker
+$blinker
 $1
 
-¿abka
+$¿abka
 $2
 
-staw
+$fontanna
 $3
 
-krokodyl
+
+$krokodyl
 $4
 
 #STATKI
 
-glider
+$glider
 $1
+1:2.
+2:3.
+3:1.
+3:2.
+3:3.
 
-dakota LWSS
+$dakota LWSS
 $2
+12:11.
+12:12.
+12:13.
+12:14.
+13:10.
+13:14.
+14:14.
+15:10.
+15:13.
 
-dakota MWSS
+$dakota MWSS
 $3
 
-dakota HWSS
+$dakota HWSS
 $4
 
 #DZIALA
 
-gosper glider gun
+$gosper glider gun
 $1

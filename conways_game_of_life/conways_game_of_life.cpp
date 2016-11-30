@@ -1,4 +1,4 @@
-// conways_game_of_life.cpp : Defines the entry point for the console application.
+// conways_game_of_life.cpp : Program napisany przez Jakuba Dziechciewicza jako pierwszy projekt na Podstawy Programowania Komputerów.
 //
 
 #include "stdafx.h"
@@ -171,11 +171,14 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 	} while (temp_string != "$" + structure_number_as_string);
 	
 	int yFromFile, xFromFile, tempNumber, digitCount;
-	do { // ustawianie ¿ywych komórek na planszy, wed³ug recepty zapisanej w pliku
-		getline(fromFile, temp_string);
-		lineCount++;
+	bool iscorrect;
+	getline(fromFile, temp_string);
+	while (temp_string[0] != '$' && !fromFile.eof()){ // ustawianie ¿ywych komórek na planszy, wed³ug recepty zapisanej w pliku
 		tempNumber = 0;
 		digitCount = 0;
+		iscorrect = true; //nie zmienia sie dla poprawnego przebiegu programu
+		if(temp_string.length() == 0) //wykluczenie pustych wierszy
+			iscorrect = false;
 		for (int i = 0; i < temp_string.length(); i++) {
 			if (isdigit(temp_string[i])) {
 				if (digitCount == 0)
@@ -189,7 +192,9 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 					yFromFile = tempNumber;
 				else {
 					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczaj¹ wymiary planszy.Program bêdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
+					Sleep(5000);
 					break; //przejscie do nastepnej linii
+					iscorrect = false;
 				}
 				tempNumber = 0;
 				digitCount = 0;
@@ -199,19 +204,25 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 					xFromFile = tempNumber;
 				else {
 					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczaj¹ wymiary planszy.Program bêdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
+					Sleep(5000);
 					break; //przejscie do nastepnej linii
+					iscorrect = false;
 				}
 				tempNumber = 0;
 				digitCount = 0;
 			}
 			else{
 				cout << "Bledne dane w linii " << lineCount << " pliku .txt. Program bêdzie kontynuowany po kilku sekundach, jednak plansza moze byc zapelniona niepoprawnie." << endl;
+				Sleep(5000);
 			}
 		}
-		cell[yFromFile][xFromFile].isAlive = true;
+		if(iscorrect == true)
+			cell[yFromFile][xFromFile].isAlive = true;
 		yFromFile = 0;
 		xFromFile = 0;
-	} while (temp_string[0] != '$' && !fromFile.eof());
+		getline(fromFile, temp_string);
+		lineCount++;
+	}
 	
 	system("cls");
 };
@@ -230,7 +241,7 @@ void templates(cellStructure cell[y][x]) {
 			load(cell, "STRUKTURY_STATYCZNE", opt2);
 			break;
 		case 2:
-			cout << "1. blinker" << endl << "2. zabka" << endl << "3. staw" << endl << "4. krokodyl" << endl;
+			cout << "1. blinker" << endl << "2. zabka" << endl << "3. fontanna" << endl << "4. krokodyl" << endl;
 			opt2 = podajInt(1, 4);
 			load(cell, "OSCYLATORY", opt2);
 			break;
