@@ -24,7 +24,7 @@ struct cellStructure //pojedyncza komórka
 void cellsSetDead(cellStructure cell[y][x]); //TWORZENIE MARTWEJ PLANSZY (SZABLONU)
 void randomization(cellStructure cell[y][x]); //LOSOWANIE ¯YWYCH KOMÓREK NA PLANSZY
 int podajInt(int min, int max);
-string intToString(int number);
+string intToString(int number); //FUNKCJA ZAMIENIAJ¥CYA LICZBY TYPU INT NA TE SAME LICZBY JAKO OBIEKT STRING. AKTUALNIE TLKO DLA LICZB OD 0 DO 99 (wiêcej nie potrzeba)
 void load(cellStructure cell[y][x], string template_name, int structure_number);
 void templates(cellStructure cell[y][x]);
 void cellsSetLife(cellStructure cell[y][x]); //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRKAMI
@@ -42,6 +42,7 @@ const int last_x = x - 2;
 
 
 const int DEFAULT_SLEEP_TIME = 500; // DEKLARACJA STA£EJ ODPOWIEDZIALNEJ ZA PRÊDKOŒÆ WYSWIETLANIA GENERACJI
+const int DEFAULT_ERROR_SLEEP_TIME = 10000; //DEKLARACJA STA£EJ ODPOWIEDZIALNEJ ZA PAUZE PO WYSWIETLENIU B£ÊDU
 
 int main()
 {
@@ -83,6 +84,7 @@ int main()
 		}
 		cout << "Wciœnij dowolny znak, aby sprobowac ponownie, lub 'e' aby wyjsc z programu: ";
 		cin >> start;
+		generationCount = 0;
 	} while (start != 'e');
 	
 	return 0;
@@ -119,7 +121,7 @@ int podajInt(int min, int max) {
 	return number;
 };
 
-string intToString(int number) { // FUNKCJA ZAMIENIAJ¥CY LICZBY W INT NA TE SAME LICZBY JAKO CI¥G ZNAKÓW. AKTUALNIE TLKO DLA LICZB OD 0 DO 99 (wiêcej nie potrzeba)
+string intToString(int number) { // FUNKCJA ZAMIENIAJ¥CYA LICZBY TYPU INT NA TE SAME LICZBY JAKO OBIEKT STRING. AKTUALNIE TLKO DLA LICZB OD 0 DO 99 (wiêcej nie potrzeba)
 	string temporary_string;
 	if (number < 10) {
 		temporary_string = " ";
@@ -140,14 +142,14 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 	fromFile.open("szablony.txt");
 	if (!fromFile.good()) {
 		cout << "Nie udalo sie otworzyc pliku 'szablony.txt' lub jest on uszkodzony. Sprawdz czy znajduje sie on w sciezce z plikiem .exe tego programu. Plansza zostanie zapelniona losowo za kilka sekund. Postepuj wedlug dalszych instrukcji." << endl;
-		Sleep(5000);
+		Sleep(DEFAULT_ERROR_SLEEP_TIME);
 		randomization(cell);
 	};
 	string temp_string;
 	do { // poszukiwanie szablonu
 		if (fromFile.eof()) {
 			cout << "Nie znaleziono szablonu. Sprawdz czy nie zmodyfikowales przypadkiem pliku 'szablony.txt'. Plansza zostanie zapelniona losowo za kilka sekund. Postepuj wedlug dalszych instrukcji." << endl;
-			Sleep(10000);
+			Sleep(DEFAULT_ERROR_SLEEP_TIME);
 			randomization(cell);
 			system("cls");
 			return;
@@ -163,7 +165,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 		lineCount++;
 		if (temp_string[0] == '#' || fromFile.eof()) {
 			cout << "Nie znaleziono struktury o danym numerze. Sprawdz czy nie zmodyfikowales przypadkiem pliku 'szablony.txt'. Plansza zostanie zapelniona losowo za kilka sekund. Postepuj wedlug dalszych instrukcji." << endl;
-			Sleep(10000);
+			Sleep(DEFAULT_ERROR_SLEEP_TIME);
 			randomization(cell);
 			system("cls");
 			return;
@@ -173,16 +175,16 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 	int yFromFile, xFromFile, tempNumber, digitCount;
 	bool iscorrect;
 	getline(fromFile, temp_string);
-	while (temp_string[0] != '$' && !fromFile.eof()){ // ustawianie ¿ywych komórek na planszy, wed³ug recepty zapisanej w pliku
+	while (temp_string[0] != '$' && temp_string[0] != '#' && !fromFile.eof()){ // ustawianie ¿ywych komórek na planszy, wed³ug recepty zapisanej w pliku
 		tempNumber = 0;
 		digitCount = 0;
 		iscorrect = true; //nie zmienia sie dla poprawnego przebiegu programu
 		if(temp_string.length() == 0) //wykluczenie pustych wierszy
 			iscorrect = false;
 		for (int i = 0; i < temp_string.length(); i++) {
-			if (isdigit(temp_string[i])) {
+			if (isdigit(temp_string[i])) { // zamiana liczby w string na int i dodanie jej do tempNumber
 				if (digitCount == 0)
-					tempNumber = tempNumber + int(temp_string[i] - '0');
+					tempNumber = tempNumber + int(temp_string[i] - '0'); 
 				else
 					tempNumber = tempNumber * 10 + int(temp_string[i] - '0');
 				digitCount++;
@@ -192,7 +194,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 					yFromFile = tempNumber;
 				else {
 					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczaj¹ wymiary planszy.Program bêdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
-					Sleep(5000);
+					Sleep(DEFAULT_ERROR_SLEEP_TIME);
 					break; //przejscie do nastepnej linii
 					iscorrect = false;
 				}
@@ -204,7 +206,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 					xFromFile = tempNumber;
 				else {
 					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczaj¹ wymiary planszy.Program bêdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
-					Sleep(5000);
+					Sleep(DEFAULT_ERROR_SLEEP_TIME);
 					break; //przejscie do nastepnej linii
 					iscorrect = false;
 				}
@@ -213,7 +215,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 			}
 			else{
 				cout << "Bledne dane w linii " << lineCount << " pliku .txt. Program bêdzie kontynuowany po kilku sekundach, jednak plansza moze byc zapelniona niepoprawnie." << endl;
-				Sleep(5000);
+				Sleep(DEFAULT_ERROR_SLEEP_TIME);
 			}
 		}
 		if(iscorrect == true)
@@ -255,7 +257,6 @@ void templates(cellStructure cell[y][x]) {
 			opt2 = podajInt(1, 1);
 			load(cell, "DZIALA", opt2);
 			break;
-//!!!dokonczyc!!!
 	}
 	
 
