@@ -24,6 +24,7 @@ struct cellStructure //pojedyncza komórka
 void cellsSetDead(cellStructure cell[y][x]); //TWORZENIE MARTWEJ PLANSZY (SZABLONU)
 void randomization(cellStructure cell[y][x]); //LOSOWANIE ¯YWYCH KOMÓREK NA PLANSZY
 int podajInt(int min, int max);
+string int_to_string(int number);
 void load(cellStructure cell[y][x], string template_name, int structure_number);
 void templates(cellStructure cell[y][x]);
 void cellsSetLife(cellStructure cell[y][x]); //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRKAMI
@@ -113,6 +114,15 @@ int podajInt(int min, int max) {
 	return number;
 };
 
+string int_to_string(int number) {
+	string temporary_string;
+	if (number < 10)
+		temporary_string = " ";
+		temporary_string[0] = char(number + '0');
+	//!!!DOKOÑCZYC!!!
+	return temporary_string;
+};
+
 void load(cellStructure cell[y][x], string template_name, int structure_number) {
 	ifstream fromFile;
 	fromFile.open("szablony.txt");
@@ -121,6 +131,28 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 		Sleep(5000);
 		randomization(cell);
 	};
+	string temp_string;
+	do { // poszukiwanie szablonu
+		if (fromFile.eof()) {
+			cout << "Nie znaleziono szablonu. Sprawdz czy nie zmodyfikowales przypadkiem pliku 'szablony.txt'. Plansza zostanie zapelniona losowo za kilka sekund. Postepuj wedlug dalszych instrukcji." << endl;
+			Sleep(5000);
+			randomization(cell);
+			return;
+		}
+		getline(fromFile, temp_string);
+	} while (temp_string != "#" + template_name);
+	string structure_number_as_string;
+	structure_number_as_string = int_to_string(structure_number);
+	do { // poszukiwanie struktury
+		getline(fromFile, temp_string);
+		if (temp_string[0] == '#') {
+			cout << "Nie znaleziono struktury o danym numerze. Sprawdz czy nie zmodyfikowales przypadkiem pliku 'szablony.txt'. Plansza zostanie zapelniona losowo za kilka sekund. Postepuj wedlug dalszych instrukcji." << endl;
+			Sleep(5000);
+			randomization(cell);
+			return;
+		}
+	} while (temp_string != "$" + structure_number_as_string);
+
 };
 
 void templates(cellStructure cell[y][x]) {
