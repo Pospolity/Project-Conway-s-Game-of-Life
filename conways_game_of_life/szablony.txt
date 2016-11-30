@@ -1,14 +1,30 @@
-y
-y
-y
-yyyyy
-yyyyyy
-STRUKTURY
-yyyyy
+Ten plik zawiera liste struktur podzielone na kategorie (szablony) oraz indeksy pól któe dla danej struktury maj¹ byæ ¿ywe. Po # sa zapisane szablony glowne, po $ struktury, natomiast wymiary sa podane w formacie [y]:[x]. .
+Kazda ingerencja w ten plik w postaci liter czy znakow w liniach nie zaczynajacych sie od znakow # i $ oraz od indeksow pól zostanie pominieta, natomiast w wymienionych liniach zostanie zauwazona przez program jako bledne dane i uniemozliwi dzialanie programu lub spowoduje pominiecie o¿ywiania w³aœciwych pól.
+Wymiary planszy to 30y 80x, wiec zywe komorki mozna definiowac w wymiarach (1 do 28)Y i (1 do 78)x. indeksy nie mieszczace sie w tych wymiarach sprawi¹ pominiêcie ca³ej linii.
 #STRUKTURY_STATYCZNE
+
+klocek
 $1
+15:40.
+15:41.
+16:40.
+16:41.
+
+³ódŸ
 $2
+15:40.
+15:41.
+16:40.
+16:42.
+17:41.
+
+bochenek
 $3
-#
-uuuu
-iop
+15:40.
+15:41.
+16:39.
+16:42.
+17:39.
+17:41.
+18:40.
+

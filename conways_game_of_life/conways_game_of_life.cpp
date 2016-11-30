@@ -24,7 +24,7 @@ struct cellStructure //pojedyncza komórka
 void cellsSetDead(cellStructure cell[y][x]); //TWORZENIE MARTWEJ PLANSZY (SZABLONU)
 void randomization(cellStructure cell[y][x]); //LOSOWANIE ¯YWYCH KOMÓREK NA PLANSZY
 int podajInt(int min, int max);
-string int_to_string(int number);
+string intToString(int number);
 void load(cellStructure cell[y][x], string template_name, int structure_number);
 void templates(cellStructure cell[y][x]);
 void cellsSetLife(cellStructure cell[y][x]); //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRKAMI
@@ -36,7 +36,7 @@ int setSpeedRatio(void);
 
  /* DEKLARACJA STA£YCH, STANOWI¥CYCH INDEKSY WIERZCHO£KÓW CZÊŒCI PLANSZY NA KTÓREJ BÊDZIE TOCZY£O SIÊ ¯YCIE (WSZYSTKIE KOMÓRKI POZA KOMÓRKAMI NA KRAWÊDZIACH PLANSZY) */
 const int first_y = 1;
-const int last_y = y - 2;
+const int last_y = y - 2;// przystosowanie do dzialania jako indeks tabeli st¹d -2
 const int first_x = 1;
 const int last_x = x - 2;
 
@@ -51,6 +51,7 @@ int main()
 	cursorReset.Y = 0;
 	cellStructure cell[y][x];
 	
+	long long generationCount = 0;
 	char start;
 	do {
 		cellsSetDead(cell); //TWORZENIE MARTWEJ PLANSZY (SZABLONU)
@@ -62,7 +63,9 @@ int main()
 			speedRatio = setSpeedRatio();
 		while (mode == 'c') { //tryb ci¹g³y wiêc nieskoñczona pêtla
 			showCurrentGeneration(cell);
+			cout << "Generacja: " << generationCount << endl;
 			nextGeneration(cell);
+			generationCount++;
 			Sleep(DEFAULT_SLEEP_TIME - speedRatio);
 			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorReset); //ustawianie kursora na pocz¹tek tablicy, aby j¹ nadpisaæ
 		}
@@ -70,9 +73,11 @@ int main()
 			char ch;
 			do {
 				showCurrentGeneration(cell);
-				cout << "\nWciœnij dowolny znak, aby przejsc do nastepnej generacji, lub 'e' aby zakonczyc aktualne zycie (komorek!): ";
+				cout << "Generacja: " << generationCount << endl;
+				cout << "Wciœnij dowolny znak, aby przejsc do nastepnej generacji, lub 'e' aby zakonczyc aktualne zycie (komorek!): ";
 				cin >> ch;
 				nextGeneration(cell);
+				generationCount++;
 				system("cls");
 			} while (ch != 'e');
 		}
@@ -114,16 +119,23 @@ int podajInt(int min, int max) {
 	return number;
 };
 
-string int_to_string(int number) {
+string intToString(int number) { // FUNKCJA ZAMIENIAJ¥CY LICZBY W INT NA TE SAME LICZBY JAKO CI¥G ZNAKÓW. AKTUALNIE TLKO DLA LICZB OD 0 DO 99 (wiêcej nie potrzeba)
 	string temporary_string;
-	if (number < 10)
+	if (number < 10) {
 		temporary_string = " ";
 		temporary_string[0] = char(number + '0');
-	//!!!DOKOÑCZYC!!!
+	};
+	if (number >= 10 && number < 100) {
+		temporary_string = "  ";
+		temporary_string[0] = char((number / 10) + '0');
+		temporary_string[1] = char(number + '0');
+	};
+	
 	return temporary_string;
 };
 
 void load(cellStructure cell[y][x], string template_name, int structure_number) {
+	int lineCount = 0; //licznik bie¿¹cych linii pliku txt
 	ifstream fromFile;
 	fromFile.open("szablony.txt");
 	if (!fromFile.good()) {
@@ -135,24 +147,73 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 	do { // poszukiwanie szablonu
 		if (fromFile.eof()) {
 			cout << "Nie znaleziono szablonu. Sprawdz czy nie zmodyfikowales przypadkiem pliku 'szablony.txt'. Plansza zostanie zapelniona losowo za kilka sekund. Postepuj wedlug dalszych instrukcji." << endl;
-			Sleep(5000);
+			Sleep(10000);
 			randomization(cell);
+			system("cls");
 			return;
 		}
 		getline(fromFile, temp_string);
+		lineCount++;
 	} while (temp_string != "#" + template_name);
+	
 	string structure_number_as_string;
-	structure_number_as_string = int_to_string(structure_number);
+	structure_number_as_string = intToString(structure_number);
 	do { // poszukiwanie struktury
 		getline(fromFile, temp_string);
-		if (temp_string[0] == '#') {
+		lineCount++;
+		if (temp_string[0] == '#' || fromFile.eof()) {
 			cout << "Nie znaleziono struktury o danym numerze. Sprawdz czy nie zmodyfikowales przypadkiem pliku 'szablony.txt'. Plansza zostanie zapelniona losowo za kilka sekund. Postepuj wedlug dalszych instrukcji." << endl;
-			Sleep(5000);
+			Sleep(10000);
 			randomization(cell);
+			system("cls");
 			return;
 		}
 	} while (temp_string != "$" + structure_number_as_string);
-
+	
+	int yFromFile, xFromFile, tempNumber, digitCount;
+	do { // ustawianie ¿ywych komórek na planszy, wed³ug recepty zapisanej w pliku
+		getline(fromFile, temp_string);
+		lineCount++;
+		tempNumber = 0;
+		digitCount = 0;
+		for (int i = 0; i < temp_string.length(); i++) {
+			if (isdigit(temp_string[i])) {
+				if (digitCount == 0)
+					tempNumber = tempNumber + int(temp_string[i] - '0');
+				else
+					tempNumber = tempNumber * 10 + int(temp_string[i] - '0');
+				digitCount++;
+			}
+			else if (temp_string[i] == ':') {
+				if (tempNumber >= first_y && tempNumber <= last_y)
+					yFromFile = tempNumber;
+				else {
+					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczaj¹ wymiary planszy.Program bêdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
+					break; //przejscie do nastepnej linii
+				}
+				tempNumber = 0;
+				digitCount = 0;
+			}
+			else if (temp_string[i] == '.') {
+				if (tempNumber >= first_x && tempNumber <= last_x)
+					xFromFile = tempNumber;
+				else {
+					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczaj¹ wymiary planszy.Program bêdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
+					break; //przejscie do nastepnej linii
+				}
+				tempNumber = 0;
+				digitCount = 0;
+			}
+			else{
+				cout << "Bledne dane w linii " << lineCount << " pliku .txt. Program bêdzie kontynuowany po kilku sekundach, jednak plansza moze byc zapelniona niepoprawnie." << endl;
+			}
+		}
+		cell[yFromFile][xFromFile].isAlive = true;
+		yFromFile = 0;
+		xFromFile = 0;
+	} while (temp_string[0] != '$' && !fromFile.eof());
+	
+	system("cls");
 };
 
 void templates(cellStructure cell[y][x]) {
