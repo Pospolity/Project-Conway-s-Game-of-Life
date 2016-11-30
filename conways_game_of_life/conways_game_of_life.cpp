@@ -232,11 +232,17 @@ void templates(cellStructure cell[y][x]) {
 		case 2:
 			cout << "1. blinker" << endl << "2. zabka" << endl << "3. staw" << endl << "4. krokodyl" << endl;
 			opt2 = podajInt(1, 4);
-			load(cell, "STRUKTURY_STATYCZNE", opt2);
+			load(cell, "OSCYLATORY", opt2);
 			break;
 		case 3:
+			cout << "1. glider" << endl << "2. dakota LWSS" << endl << "3. dakota MWSS" << endl << "4. dakota HWSS" << endl;
+			opt2 = podajInt(1, 4);
+			load(cell, "STATKI", opt2);
 			break;
 		case 4:
+			cout << "1.  gosper glider gun" << endl;
+			opt2 = podajInt(1, 1);
+			load(cell, "DZIALA", opt2);
 			break;
 //!!!dokonczyc!!!
 	}

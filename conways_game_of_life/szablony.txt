@@ -28,3 +28,44 @@ $3
 17:41.
 18:40.
 
+kryszta³
+$4
+
+koniczynka
+$5
+
+staw
+$6
+
+#OSCYLATORY
+
+blinker
+$1
+
+¿abka
+$2
+
+staw
+$3
+
+krokodyl
+$4
+
+#STATKI
+
+glider
+$1
+
+dakota LWSS
+$2
+
+dakota MWSS
+$3
+
+dakota HWSS
+$4
+
+#DZIALA
+
+gosper glider gun
+$1
