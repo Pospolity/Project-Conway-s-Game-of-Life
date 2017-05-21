@@ -1,4 +1,4 @@
-// conways_game_of_life.cpp : Program napisany przez Jakuba Dziechciewicza jako pierwszy projekt na Podstawy Programowania Komputerów.
+// conways_game_of_life.cpp : Program napisany przez Jakuba Dziechciewicza jako pierwszy projekt na Podstawy Programowania KomputerÃ³w (Informatyka PolSl sem.1).
 //
 
 #include "stdafx.h"
@@ -11,38 +11,38 @@
 
 using namespace std;
 
-/* DEKLARACJA STA£YCH WYMIARÓW PLANSZY */
+/* DEKLARACJA STAÂ£YCH WYMIARÃ“W PLANSZY */
 const int y = 30; //30 fajnie 
 const int x = 80; //80 fajnie
 
-struct cellStructure //pojedyncza komórka
+struct cellStructure //pojedyncza komÃ³rka
 {
-	bool isAlive; //czy komórka jest ¿ywa w tej generacji
-	int neighbours; //liczba ¿ywych s¹siadów komórki
+	bool isAlive; //czy komÃ³rka jest Â¿ywa w tej generacji
+	int neighbours; //liczba Â¿ywych sÂ¹siadÃ³w komÃ³rki
 };
 
 void cellsSetDead(cellStructure cell[y][x]); //TWORZENIE MARTWEJ PLANSZY (SZABLONU)
-void randomization(cellStructure cell[y][x]); //LOSOWANIE ¯YWYCH KOMÓREK NA PLANSZY
+void randomization(cellStructure cell[y][x]); //LOSOWANIE Â¯YWYCH KOMÃ“REK NA PLANSZY
 int podajInt(int min, int max);
-string intToString(int number); //FUNKCJA ZAMIENIAJ¥CYA LICZBY TYPU INT NA TE SAME LICZBY JAKO OBIEKT STRING. AKTUALNIE TLKO DLA LICZB OD 0 DO 99 (wiêcej nie potrzeba)
+string intToString(int number); //FUNKCJA ZAMIENIAJÂ¥CYA LICZBY TYPU INT NA TE SAME LICZBY JAKO OBIEKT STRING. AKTUALNIE TLKO DLA LICZB OD 0 DO 99 (wiÃªcej nie potrzeba)
 void load(cellStructure cell[y][x], string template_name, int structure_number);
 void templates(cellStructure cell[y][x]);
-void cellsSetLife(cellStructure cell[y][x]); //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRKAMI
-void nextGeneration(cellStructure cell[y][x]); //PRZEJŒCIE DO KOLEJNEJ GENERAJI
-char setMode(void); //USTAWIANIE TRYBU ¯YCIA (KROKOWY LUB NIESKOÑCZONY)
-void showCurrentGeneration(cellStructure cell[y][x]); //WYŒWIETLANIE OBECNEJ GENERACJI
+void cellsSetLife(cellStructure cell[y][x]); //ZAPEÂ£NIANIE PLANSZY Â¯YWYMI KOMÃ“RKAMI
+void nextGeneration(cellStructure cell[y][x]); //PRZEJÅ’CIE DO KOLEJNEJ GENERAJI
+char setMode(void); //USTAWIANIE TRYBU Â¯YCIA (KROKOWY LUB NIESKOÃ‘CZONY)
+void showCurrentGeneration(cellStructure cell[y][x]); //WYÅ’WIETLANIE OBECNEJ GENERACJI
 int setSpeedRatio(void);
 
 
- /* DEKLARACJA STA£YCH, STANOWI¥CYCH INDEKSY WIERZCHO£KÓW CZÊŒCI PLANSZY NA KTÓREJ BÊDZIE TOCZY£O SIÊ ¯YCIE (WSZYSTKIE KOMÓRKI POZA KOMÓRKAMI NA KRAWÊDZIACH PLANSZY) */
+ /* DEKLARACJA STAÂ£YCH, STANOWIÂ¥CYCH INDEKSY WIERZCHOÂ£KÃ“W CZÃŠÅ’CI PLANSZY NA KTÃ“REJ BÃŠDZIE TOCZYÂ£O SIÃŠ Â¯YCIE (WSZYSTKIE KOMÃ“RKI POZA KOMÃ“RKAMI NA KRAWÃŠDZIACH PLANSZY) */
 const int first_y = 1;
-const int last_y = y - 2;// przystosowanie do dzialania jako indeks tabeli st¹d -2
+const int last_y = y - 2;// przystosowanie do dzialania jako indeks tabeli stÂ¹d -2
 const int first_x = 1;
 const int last_x = x - 2;
 
 
-const int DEFAULT_SLEEP_TIME = 500; // DEKLARACJA STA£EJ ODPOWIEDZIALNEJ ZA PRÊDKOŒÆ WYSWIETLANIA GENERACJI
-const int DEFAULT_ERROR_SLEEP_TIME = 10000; //DEKLARACJA STA£EJ ODPOWIEDZIALNEJ ZA PAUZE PO WYSWIETLENIU B£ÊDU
+const int DEFAULT_SLEEP_TIME = 500; // DEKLARACJA STAÂ£EJ ODPOWIEDZIALNEJ ZA PRÃŠDKOÅ’Ã† WYSWIETLANIA GENERACJI
+const int DEFAULT_ERROR_SLEEP_TIME = 10000; //DEKLARACJA STAÂ£EJ ODPOWIEDZIALNEJ ZA PAUZE PO WYSWIETLENIU BÂ£ÃŠDU
 
 int main()
 {
@@ -56,33 +56,33 @@ int main()
 	char start;
 	do {
 		cellsSetDead(cell); //TWORZENIE MARTWEJ PLANSZY (SZABLONU)
-		cellsSetLife(cell); //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRKAMI
-		char mode = setMode(); //USTAWIANIE TRYBU ¯YCIA (KROKOWY LUB NIESKOÑCZONY)
-		/* ¯YCIE!!! */
+		cellsSetLife(cell); //ZAPEÂ£NIANIE PLANSZY Â¯YWYMI KOMÃ“RKAMI
+		char mode = setMode(); //USTAWIANIE TRYBU Â¯YCIA (KROKOWY LUB NIESKOÃ‘CZONY)
+		/* Â¯YCIE!!! */
 		int speedRatio = 1;
 		if (mode == 'c')
 			speedRatio = setSpeedRatio();
-		while (mode == 'c') { //tryb ci¹g³y wiêc nieskoñczona pêtla
+		while (mode == 'c') { //tryb ciÂ¹gÂ³y wiÃªc nieskoÃ±czona pÃªtla
 			showCurrentGeneration(cell);
 			cout << "Generacja: " << generationCount << endl;
 			nextGeneration(cell);
 			generationCount++;
 			Sleep(DEFAULT_SLEEP_TIME - speedRatio);
-			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorReset); //ustawianie kursora na pocz¹tek tablicy, aby j¹ nadpisaæ
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorReset); //ustawianie kursora na poczÂ¹tek tablicy, aby jÂ¹ nadpisaÃ¦
 		}
 		if (mode == 'k') { //tryb krokowy
 			char ch;
 			do {
 				showCurrentGeneration(cell);
 				cout << "Generacja: " << generationCount << endl;
-				cout << "Wciœnij dowolny znak, aby przejsc do nastepnej generacji, lub 'e' aby zakonczyc aktualne zycie (komorek!): ";
+				cout << "WciÅ“nij dowolny znak, aby przejsc do nastepnej generacji, lub 'e' aby zakonczyc aktualne zycie (komorek!): ";
 				cin >> ch;
 				nextGeneration(cell);
 				generationCount++;
 				system("cls");
 			} while (ch != 'e');
 		}
-		cout << "Wciœnij dowolny znak, aby sprobowac ponownie, lub 'e' aby wyjsc z programu: ";
+		cout << "WciÅ“nij dowolny znak, aby sprobowac ponownie, lub 'e' aby wyjsc z programu: ";
 		cin >> start;
 		generationCount = 0;
 	} while (start != 'e');
@@ -121,7 +121,7 @@ int podajInt(int min, int max) {
 	return number;
 };
 
-string intToString(int number) { // FUNKCJA ZAMIENIAJ¥CYA LICZBY TYPU INT NA TE SAME LICZBY JAKO OBIEKT STRING. AKTUALNIE TLKO DLA LICZB OD 0 DO 99 (wiêcej nie potrzeba)
+string intToString(int number) { // FUNKCJA ZAMIENIAJÂ¥CYA LICZBY TYPU INT NA TE SAME LICZBY JAKO OBIEKT STRING. AKTUALNIE TLKO DLA LICZB OD 0 DO 99 (wiÃªcej nie potrzeba)
 	string temporary_string;
 	if (number < 10) {
 		temporary_string = " ";
@@ -137,7 +137,7 @@ string intToString(int number) { // FUNKCJA ZAMIENIAJ¥CYA LICZBY TYPU INT NA TE 
 };
 
 void load(cellStructure cell[y][x], string template_name, int structure_number) {
-	int lineCount = 0; //licznik bie¿¹cych linii pliku txt
+	int lineCount = 0; //licznik bieÂ¿Â¹cych linii pliku txt
 	ifstream fromFile;
 	fromFile.open("szablony.txt");
 	if (!fromFile.good()) {
@@ -175,7 +175,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 	int yFromFile, xFromFile, tempNumber, digitCount;
 	bool iscorrect;
 	getline(fromFile, temp_string);
-	while (temp_string[0] != '$' && temp_string[0] != '#' && !fromFile.eof()){ // ustawianie ¿ywych komórek na planszy, wed³ug recepty zapisanej w pliku
+	while (temp_string[0] != '$' && temp_string[0] != '#' && !fromFile.eof()){ // ustawianie Â¿ywych komÃ³rek na planszy, wedÂ³ug recepty zapisanej w pliku
 		tempNumber = 0;
 		digitCount = 0;
 		iscorrect = true; //nie zmienia sie dla poprawnego przebiegu programu
@@ -193,7 +193,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 				if (tempNumber >= first_y && tempNumber <= last_y)
 					yFromFile = tempNumber;
 				else {
-					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczaj¹ wymiary planszy.Program bêdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
+					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczajÂ¹ wymiary planszy.Program bÃªdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
 					Sleep(DEFAULT_ERROR_SLEEP_TIME);
 					break; //przejscie do nastepnej linii
 					iscorrect = false;
@@ -205,7 +205,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 				if (tempNumber >= first_x && tempNumber <= last_x)
 					xFromFile = tempNumber;
 				else {
-					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczaj¹ wymiary planszy.Program bêdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
+					cout << "Bledne dane w linii " << lineCount << " pliku .txt. Podane wymiary przekraczajÂ¹ wymiary planszy.Program bÃªdzie kontynuowany po kilku sekundach, jednak to pole zostanie pominiete.";
 					Sleep(DEFAULT_ERROR_SLEEP_TIME);
 					break; //przejscie do nastepnej linii
 					iscorrect = false;
@@ -214,7 +214,7 @@ void load(cellStructure cell[y][x], string template_name, int structure_number) 
 				digitCount = 0;
 			}
 			else{
-				cout << "Bledne dane w linii " << lineCount << " pliku .txt. Program bêdzie kontynuowany po kilku sekundach, jednak plansza moze byc zapelniona niepoprawnie." << endl;
+				cout << "Bledne dane w linii " << lineCount << " pliku .txt. Program bÃªdzie kontynuowany po kilku sekundach, jednak plansza moze byc zapelniona niepoprawnie." << endl;
 				Sleep(DEFAULT_ERROR_SLEEP_TIME);
 			}
 		}
@@ -263,7 +263,7 @@ void templates(cellStructure cell[y][x]) {
 	
 };
 
-void cellsSetLife(cellStructure cell[y][x]) //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRKAMI
+void cellsSetLife(cellStructure cell[y][x]) //ZAPEÂ£NIANIE PLANSZY Â¯YWYMI KOMÃ“RKAMI
 {
 	char startMap;
 	do {
@@ -271,20 +271,20 @@ void cellsSetLife(cellStructure cell[y][x]) //ZAPE£NIANIE PLANSZY ¯YWYMI KOMÓRKA
 		cin >> startMap;
 		system("cls");
 		if (startMap == 'l')
-			randomization(cell); //funkcja losuj¹ca planszê
+			randomization(cell); //funkcja losujÂ¹ca planszÃª
 		else if (startMap == 's') 
-			templates(cell); //funkcja wype³niaj¹ca plansze szablonem
+			templates(cell); //funkcja wypeÂ³niajÂ¹ca plansze szablonem
 		else
 			cout << "nie ma takiej opcji, sprobuj ponownie." << endl;
-	} while (startMap != 's' && startMap != 'l'); //odkomentowac pierwszy warunek po dodaniu obs³ugi szablonów
+	} while (startMap != 's' && startMap != 'l'); //odkomentowac pierwszy warunek po dodaniu obsÂ³ugi szablonÃ³w
 };
 
-void nextGeneration(cellStructure cell[y][x]) //PRZEJŒCIE DO KOLEJNEJ GENERAJI
+void nextGeneration(cellStructure cell[y][x]) //PRZEJÅ’CIE DO KOLEJNEJ GENERAJI
 {
-	//		POSZUKIWANIE ¯YJ¥CYCH KOMÓREK I...
+	//		POSZUKIWANIE Â¯YJÂ¥CYCH KOMÃ“REK I...
 	for (int iy = first_y; iy <= last_y; ++iy) {
 		for (int jx = first_x; jx <= last_x; ++jx) {
-			if (cell[iy][jx].isAlive == true) { // ...dla znalezionej ¿ywej komórki inkrementowanie wartoœci neigbours jej s¹siadów o 1
+			if (cell[iy][jx].isAlive == true) { // ...dla znalezionej Â¿ywej komÃ³rki inkrementowanie wartoÅ“ci neigbours jej sÂ¹siadÃ³w o 1
 				cell[iy + 1][jx - 1].neighbours++;
 				cell[iy + 1][jx].neighbours++;
 				cell[iy + 1][jx + 1].neighbours++;
@@ -293,26 +293,26 @@ void nextGeneration(cellStructure cell[y][x]) //PRZEJŒCIE DO KOLEJNEJ GENERAJI
 				cell[iy - 1][jx - 1].neighbours++;
 				cell[iy - 1][jx].neighbours++;
 				cell[iy - 1][jx + 1].neighbours++;
-			} // martwe komórki pomijamy
+			} // martwe komÃ³rki pomijamy
 		}
 	}
-	//		BADANIE NA PODSTAWIE ILOŒCI S¥SIADÓW CZY KOMÓRKA ZMIENI STAN ORAZ ZMIANA TYCH STANÓW
+	//		BADANIE NA PODSTAWIE ILOÅ’CI SÂ¥SIADÃ“W CZY KOMÃ“RKA ZMIENI STAN ORAZ ZMIANA TYCH STANÃ“W
 	for (int iy = first_y; iy <= last_y; ++iy) {
 		for (int jx = first_x; jx <= last_x; ++jx) {
-			if (cell[iy][jx].isAlive == false) { // dla martwej komórki sprawdzam czy ma dokladnie 3 sasiadow (wtedy komorka ozywa czyli zmienia sie jej stan) 
+			if (cell[iy][jx].isAlive == false) { // dla martwej komÃ³rki sprawdzam czy ma dokladnie 3 sasiadow (wtedy komorka ozywa czyli zmienia sie jej stan) 
 				if (cell[iy][jx].neighbours == 3)
 					cell[iy][jx].isAlive = true;
 			}
-			else { // dla ¿ywych komórek maj¹cych 2 lub 3 s¹siadów stan sie nie zmienia (stateChange wci¹¿ ma wartoœæ false), przy innej liczbie s¹siadów komórka umiera (stateChange = true)
+			else { // dla Â¿ywych komÃ³rek majÂ¹cych 2 lub 3 sÂ¹siadÃ³w stan sie nie zmienia (stateChange wciÂ¹Â¿ ma wartoÅ“Ã¦ false), przy innej liczbie sÂ¹siadÃ³w komÃ³rka umiera (stateChange = true)
 				if (cell[iy][jx].neighbours != 2 && cell[iy][jx].neighbours != 3)
 					cell[iy][jx].isAlive = false;
 			}
-			cell[iy][jx].neighbours = 0; //zmiana wartoœci neigbours na pocz¹tkowe ju¿ sprawdzonych komórek, ¿eby przygotowaæ je do kolejnej generacji
+			cell[iy][jx].neighbours = 0; //zmiana wartoÅ“ci neigbours na poczÂ¹tkowe juÂ¿ sprawdzonych komÃ³rek, Â¿eby przygotowaÃ¦ je do kolejnej generacji
 		}
 	}
 };
 
-char setMode(void) //USTAWIANIE TRYBU ¯YCIA (KROKOWY LUB NIESKOÑCZONY)
+char setMode(void) //USTAWIANIE TRYBU Â¯YCIA (KROKOWY LUB NIESKOÃ‘CZONY)
 {
 	char mode;
 	do{
@@ -325,9 +325,9 @@ char setMode(void) //USTAWIANIE TRYBU ¯YCIA (KROKOWY LUB NIESKOÑCZONY)
 	return mode;
 };
 
-void showCurrentGeneration(cellStructure cell[y][x]) //WYŒWIETLANIE OBECNEJ GENERACJI
+void showCurrentGeneration(cellStructure cell[y][x]) //WYÅ’WIETLANIE OBECNEJ GENERACJI
 {
-	//		przesuwanie siê po ¿ywej planszy aby wyœwietliæ obecn¹ generacjê
+	//		przesuwanie siÃª po Â¿ywej planszy aby wyÅ“wietliÃ¦ obecnÂ¹ generacjÃª
 	for (int iy = first_y; iy <= last_y; ++iy) {
 		for (int jx = first_x; jx <= last_x; ++jx) {
 			if (cell[iy][jx].isAlive == false)
